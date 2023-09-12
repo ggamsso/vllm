@@ -262,7 +262,10 @@ class GPT2LMHeadModel(nn.Module):
                 if not name.endswith(".weight"):
                     continue
                 loaded_weight = loaded_weight.t()
-            param = state_dict[name]
+            try:
+                param = state_dict[name]
+            except KeyError:
+                continue
 
             if name == "transformer.wte.weight":
                 load_padded_tensor_parallel_vocab(param, loaded_weight,
